@@ -20,6 +20,9 @@ Springboot + shiro权限管理。这或许是流程最详细、代码最干净�
 | shiro-core  | 核心业务类模块，提供基本的数据操作、工具处理等 |    
 | shiro-admin | 后台管理模块                  |    
 
+#### SQL Model
+
+![首页](https://gitee.com/yadong.zhang/shiro/raw/master/docs/img/sql-model.png?v=1.0)
 
 #### 使用说明
 
