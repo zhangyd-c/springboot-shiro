@@ -73,11 +73,14 @@ public class SysRoleResourcesServiceImpl implements SysRoleResourcesService {
     @Override
     public void insertList(List<RoleResources> entities) {
         Assert.notNull(entities, "entities不可为空！");
+        if (CollectionUtils.isEmpty(entities)) {
+            return;
+        }
         List<SysRoleResources> sysRoleResources = new ArrayList<>();
-        for (RoleResources RoleResources : entities) {
-            RoleResources.setUpdateTime(new Date());
-            RoleResources.setCreateTime(new Date());
-            sysRoleResources.add(RoleResources.getSysRoleResources());
+        for (RoleResources rr : entities) {
+            rr.setUpdateTime(new Date());
+            rr.setCreateTime(new Date());
+            sysRoleResources.add(rr.getSysRoleResources());
         }
         resourceMapper.insertList(sysRoleResources);
     }
@@ -173,15 +176,16 @@ public class SysRoleResourcesServiceImpl implements SysRoleResourcesService {
         if (CollectionUtils.isEmpty(sysRoleResources)) {
             return null;
         }
-        List<RoleResources> RoleResources = new ArrayList<>();
+        List<RoleResources> rr = new ArrayList<>();
         for (SysRoleResources r : sysRoleResources) {
-            RoleResources.add(new RoleResources(r));
+            rr.add(new RoleResources(r));
         }
-        return RoleResources;
+        return rr;
     }
 
     /**
      * 添加角色资源
+     *
      * @param roleId
      * @param resourcesId
      */
@@ -193,9 +197,15 @@ public class SysRoleResourcesServiceImpl implements SysRoleResourcesService {
         //添加
         if (!StringUtils.isEmpty(resourcesId)) {
             String[] resourcesArr = resourcesId.split(",");
+            if (resourcesArr.length == 0) {
+                return;
+            }
             SysRoleResources r = null;
             List<SysRoleResources> roleResources = new ArrayList<>();
             for (String ri : resourcesArr) {
+                if (StringUtils.isEmpty(ri)) {
+                    continue;
+                }
                 r = new SysRoleResources();
                 r.setRoleId(roleId);
                 r.setResourcesId(Long.parseLong(ri));
@@ -204,12 +214,16 @@ public class SysRoleResourcesServiceImpl implements SysRoleResourcesService {
                 roleResources.add(r);
 
             }
+            if (roleResources.size() == 0) {
+                return;
+            }
             resourceMapper.insertList(roleResources);
         }
     }
 
     /**
      * 通过角色id批量删除
+     *
      * @param roleId
      */
     @Override

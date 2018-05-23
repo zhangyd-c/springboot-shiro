@@ -21,7 +21,6 @@ package com.zyd.shiro.business.service.impl;
 
 import com.zyd.shiro.business.entity.UserRole;
 import com.zyd.shiro.business.service.SysUserRoleService;
-import com.zyd.shiro.framework.holder.RequestHolder;
 import com.zyd.shiro.persistence.beans.SysUserRole;
 import com.zyd.shiro.persistence.mapper.SysUserRoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
@@ -74,11 +74,14 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
     @Override
     public void insertList(List<UserRole> entities) {
         Assert.notNull(entities, "entities不可为空！");
+        if (CollectionUtils.isEmpty(entities)) {
+            return;
+        }
         List<SysUserRole> sysUserRole = new ArrayList<>();
-        for (UserRole UserRole : entities) {
-            UserRole.setUpdateTime(new Date());
-            UserRole.setCreateTime(new Date());
-            sysUserRole.add(UserRole.getSysUserRole());
+        for (UserRole ur : entities) {
+            ur.setUpdateTime(new Date());
+            ur.setCreateTime(new Date());
+            sysUserRole.add(ur.getSysUserRole());
         }
         resourceMapper.insertList(sysUserRole);
     }
@@ -174,11 +177,11 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
         if (CollectionUtils.isEmpty(sysUserRole)) {
             return null;
         }
-        List<UserRole> UserRole = new ArrayList<>();
+        List<UserRole> urList = new ArrayList<>();
         for (SysUserRole r : sysUserRole) {
-            UserRole.add(new UserRole(r));
+            urList.add(new UserRole(r));
         }
-        return UserRole;
+        return urList;
     }
 
     /**
@@ -193,10 +196,16 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
         //删除
         removeByUserId(userId);
         //添加
-        String[] roleids = roleIds.split(",");
+        String[] roleIdArr = roleIds.split(",");
+        if (roleIdArr.length == 0) {
+            return;
+        }
         UserRole u = null;
         List<UserRole> roles = new ArrayList<>();
-        for (String roleId : roleids) {
+        for (String roleId : roleIdArr) {
+            if (StringUtils.isEmpty(roleId)) {
+                continue;
+            }
             u = new UserRole();
             u.setUserId(userId);
             u.setRoleId(Long.parseLong(roleId));
