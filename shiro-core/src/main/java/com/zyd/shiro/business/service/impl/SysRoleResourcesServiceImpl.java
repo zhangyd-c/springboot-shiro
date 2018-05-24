@@ -185,18 +185,19 @@ public class SysRoleResourcesServiceImpl implements SysRoleResourcesService {
 
     /**
      * 添加角色资源
+     * 该节代码参考自http://blog.csdn.net/poorcoder_/article/details/71374002
      *
      * @param roleId
-     * @param resourcesId
+     * @param resourcesIds
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = {Exception.class})
-    public void addRoleResources(Long roleId, String resourcesId) {
+    public void addRoleResources(Long roleId, String resourcesIds) {
         //删除
         removeByRoleId(roleId);
         //添加
-        if (!StringUtils.isEmpty(resourcesId)) {
-            String[] resourcesArr = resourcesId.split(",");
+        if (!StringUtils.isEmpty(resourcesIds)) {
+            String[] resourcesArr = resourcesIds.split(",");
             if (resourcesArr.length == 0) {
                 return;
             }

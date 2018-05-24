@@ -38,9 +38,9 @@ public interface SysRoleResourcesService extends AbstractService<RoleResources, 
      * 添加角色资源
      *
      * @param roleId
-     * @param resourcesId
+     * @param resourcesIds
      */
-    void addRoleResources(Long roleId, String resourcesId);
+    void addRoleResources(Long roleId, String resourcesIds);
 
     /**
      * 通过角色id批量删除
