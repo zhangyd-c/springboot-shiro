@@ -58,6 +58,14 @@ _链接_： `http://127.0.0.1:8080/druid/index.html`
 3. 提交代码
 4. 新建 Pull Request
 
+#### 参考资料
+
+1. 本项目部分代码参考自网络文章。[查看原文链接](http://blog.csdn.net/poorcoder_/article/details/71374002)    
+2. 前端模板来源自开源模板。[查看模板链接](https://colorlib.com/polygon/gentelella/index.html)，[查看开源项目](https://github.com/puikinsh/gentelella)    
+3. 部分js实现参考自本人开源项目。[查看开源项目](https://gitee.com/yadong.zhang/DBlog)    
+
+感谢无私的网友，如果其他问题，欢迎各位朋友指正。
+
 #### 图片预览
 
 ![首页](https://gitee.com/yadong.zhang/shiro/raw/master/docs/img/index.png?v=1.0)

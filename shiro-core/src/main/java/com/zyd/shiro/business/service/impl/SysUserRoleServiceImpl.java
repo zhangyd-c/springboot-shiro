@@ -186,6 +186,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
 
     /**
      * 添加用户角色
+     * 该节代码参考自http://blog.csdn.net/poorcoder_/article/details/71374002
      *
      * @param userId
      * @param roleIds
