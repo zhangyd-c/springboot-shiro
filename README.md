@@ -22,7 +22,7 @@ Springboot + shiro权限管理。这或许是流程最详细、代码最干净�
 
 #### SQL Model
 
-![首页](https://gitee.com/yadong.zhang/shiro/raw/master/docs/img/sql-model.png?v=1.0)
+![sql model](https://gitee.com/yadong.zhang/shiro/raw/master/docs/img/sql-model.png?v=1.0)
 
 #### 使用说明
 
