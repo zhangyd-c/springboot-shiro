@@ -19,7 +19,6 @@
  */
 package com.zyd.shiro.controller;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zyd.shiro.business.entity.User;
 import com.zyd.shiro.business.enums.ResponseStatus;
@@ -30,6 +29,8 @@ import com.zyd.shiro.framework.object.PageResult;
 import com.zyd.shiro.framework.object.ResponseVO;
 import com.zyd.shiro.util.PasswordUtil;
 import com.zyd.shiro.util.ResultUtil;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,9 +55,9 @@ public class RestUserController {
     @Autowired
     private SysUserRoleService userRoleService;
 
+    @RequiresPermissions("users")
     @PostMapping("/list")
     public PageResult list(UserConditionVO vo) {
-        PageHelper.startPage(vo.getPageNumber() - 1, vo.getPageSize());
         PageInfo<User> pageInfo = userService.findPageBreakByCondition(vo);
         return ResultUtil.tablePage(pageInfo);
     }
@@ -70,6 +71,7 @@ public class RestUserController {
      *         此处获取的参数的角色id是以 “,” 分隔的字符串
      * @return
      */
+    @RequiresPermissions("user:allotRole")
     @PostMapping("/saveUserRoles")
     public ResponseVO saveUserRoles(Long userId, String roleIds) {
         if (StringUtils.isEmpty(userId)) {
@@ -79,6 +81,7 @@ public class RestUserController {
         return ResultUtil.success("成功");
     }
 
+    @RequiresPermissions("user:add")
     @PostMapping(value = "/add")
     public ResponseVO add(User user) {
         User u = userService.getByUserName(user.getUsername());
@@ -95,6 +98,7 @@ public class RestUserController {
         }
     }
 
+    @RequiresPermissions(value = {"user:batchDelete", "user:delete"}, logical = Logical.OR)
     @PostMapping(value = "/remove")
     public ResponseVO remove(Long[] ids) {
         if (null == ids) {
@@ -107,11 +111,13 @@ public class RestUserController {
         return ResultUtil.success("成功删除 [" + ids.length + "] 个用户");
     }
 
+    @RequiresPermissions("user:edit")
     @PostMapping("/get/{id}")
     public ResponseVO get(@PathVariable Long id) {
         return ResultUtil.success(null, this.userService.getByPrimaryKey(id));
     }
 
+    @RequiresPermissions("user:edit")
     @PostMapping("/edit")
     public ResponseVO edit(User user) {
         try {

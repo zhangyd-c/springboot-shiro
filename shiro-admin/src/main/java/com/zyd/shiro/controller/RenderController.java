@@ -28,7 +28,10 @@ package com.zyd.shiro.controller;
  * @date 2018/4/24 14:37
  * @since 1.0
  */
+
 import com.zyd.shiro.util.ResultUtil;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -45,26 +48,25 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class RenderController {
 
-    @GetMapping("")
+    @RequiresAuthentication
+    @GetMapping(value = {"", "/index"})
     public ModelAndView home() {
         return ResultUtil.view("index");
     }
 
-    @GetMapping("/index")
-    public ModelAndView index() {
-        return ResultUtil.view("index");
-    }
-
+    @RequiresPermissions("users")
     @GetMapping("/users")
     public ModelAndView user() {
         return ResultUtil.view("user/list");
     }
 
+    @RequiresPermissions("resources")
     @GetMapping("/resources")
     public ModelAndView resources() {
         return ResultUtil.view("resources/list");
     }
 
+    @RequiresPermissions("roles")
     @GetMapping("/roles")
     public ModelAndView roles() {
         return ResultUtil.view("role/list");
