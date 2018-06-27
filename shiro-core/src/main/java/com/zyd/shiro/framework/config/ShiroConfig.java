@@ -23,6 +23,7 @@ import com.zyd.shiro.business.service.ShiroService;
 import com.zyd.shiro.business.shiro.credentials.RetryLimitCredentialsMatcher;
 import com.zyd.shiro.business.shiro.realm.ShiroRealm;
 import com.zyd.shiro.framework.property.RedisProperties;
+import com.zyd.shiro.framework.redis.CustomRedisManager;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -68,7 +69,7 @@ public class ShiroConfig {
     public MethodInvokingFactoryBean methodInvokingFactoryBean(SecurityManager securityManager){
         MethodInvokingFactoryBean bean = new MethodInvokingFactoryBean();
         bean.setStaticMethod("org.apache.shiro.SecurityUtils.setSecurityManager");
-        bean.setArguments(new Object[]{securityManager});
+        bean.setArguments(securityManager);
         return bean;
     }
 
@@ -166,10 +167,11 @@ public class ShiroConfig {
      * @return
      */
     public RedisManager redisManager() {
-        RedisManager redisManager = new RedisManager();
+        CustomRedisManager redisManager = new CustomRedisManager();
         redisManager.setHost(redisProperties.getHost());
         redisManager.setPort(redisProperties.getPort());
-        redisManager.setExpire(1800);
+        redisManager.setDatabase(redisProperties.getDatabase());
+        redisManager.setExpire(redisProperties.getExpire());
         redisManager.setTimeout(redisProperties.getTimeout());
         redisManager.setPassword(redisProperties.getPassword());
         return redisManager;
