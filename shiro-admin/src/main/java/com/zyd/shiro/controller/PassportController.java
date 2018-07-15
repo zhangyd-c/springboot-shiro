@@ -51,10 +51,6 @@ public class PassportController {
 
     @GetMapping("/login")
     public ModelAndView login(Model model) {
-        Subject subject = SecurityUtils.getSubject();
-        if (subject.isAuthenticated()||subject.isRemembered()){
-            return ResultUtil.redirect("/index");
-        }
         return ResultUtil.view("/login");
     }
 
