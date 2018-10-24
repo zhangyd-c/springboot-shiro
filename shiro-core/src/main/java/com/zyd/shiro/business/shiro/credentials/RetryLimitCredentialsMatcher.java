@@ -63,7 +63,8 @@ public class RetryLimitCredentialsMatcher extends CredentialsMatcher {
 
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
-        Long userId = (Long) info.getPrincipals().getPrimaryPrincipal();
+        User shiroUser = (User) info.getPrincipals().getPrimaryPrincipal();
+        Long userId = shiroUser.getId();
         User user = userService.getByPrimaryKey(userId);
         String username = user.getUsername();
         // 访问一次，计数一次

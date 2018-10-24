@@ -74,7 +74,7 @@ public class ShiroRealm extends AuthorizingRealm {
 
         // principal参数使用用户Id，方便动态刷新用户权限
         return new SimpleAuthenticationInfo(
-                user.getId(),
+                user,
                 user.getPassword(),
                 ByteSource.Util.bytes(username),
                 getName()
@@ -89,7 +89,8 @@ public class ShiroRealm extends AuthorizingRealm {
         // 权限信息对象info,用来存放查出的用户的所有的角色（role）及权限（permission）
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
-        Long userId = (Long) SecurityUtils.getSubject().getPrincipal();
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Long userId = user.getId();
 
         // 赋予角色
         List<Role> roleList = roleService.listRolesByUserId(userId);

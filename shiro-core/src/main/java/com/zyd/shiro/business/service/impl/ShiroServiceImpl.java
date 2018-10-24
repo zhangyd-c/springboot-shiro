@@ -138,7 +138,7 @@ public class ShiroServiceImpl implements ShiroService {
         ShiroRealm shiroRealm = (ShiroRealm) rsm.getRealms().iterator().next();
         Subject subject = SecurityUtils.getSubject();
         String realmName = subject.getPrincipals().getRealmNames().iterator().next();
-        SimplePrincipalCollection principals = new SimplePrincipalCollection(user.getId(), realmName);
+        SimplePrincipalCollection principals = new SimplePrincipalCollection(user, realmName);
         subject.runAs(principals);
         shiroRealm.getAuthorizationCache().remove(subject.getPrincipals());
         subject.releaseRunAs();
