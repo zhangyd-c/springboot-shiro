@@ -38,6 +38,7 @@ import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -66,6 +67,20 @@ public class ShiroConfig {
     @Bean(name = "lifecycleBeanPostProcessor")
     public static LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
+    }
+
+    /**
+     * 修复UnavailableSecurityManagerException（详见https://gitee.com/yadong.zhang/DBlog/issues/IK7C3）
+     *
+     * @param securityManager
+     * @return
+     */
+    @Bean
+    public MethodInvokingFactoryBean methodInvokingFactoryBean(SecurityManager securityManager) {
+        MethodInvokingFactoryBean bean = new MethodInvokingFactoryBean();
+        bean.setStaticMethod("org.apache.shiro.SecurityUtils.setSecurityManager");
+        bean.setArguments(securityManager);
+        return bean;
     }
 
     /**
