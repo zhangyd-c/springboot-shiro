@@ -175,7 +175,7 @@ public class ShiroConfig {
         RedisManager redisManager = new RedisManager();
         redisManager.setHost(redisProperties.getHost());
         redisManager.setPort(redisProperties.getPort());
-        redisManager.setExpire(1800);
+        redisManager.setExpire(redisProperties.getExpire());
         redisManager.setTimeout(redisProperties.getTimeout());
         redisManager.setPassword(redisProperties.getPassword());
         return redisManager;
@@ -212,6 +212,7 @@ public class ShiroConfig {
     @Bean
     public DefaultWebSessionManager sessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setGlobalSessionTimeout(redisProperties.getExpire() * 1000L);
         sessionManager.setSessionDAO(redisSessionDAO());
         return sessionManager;
     }
@@ -225,7 +226,7 @@ public class ShiroConfig {
         //这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
         SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
         //<!-- 记住我cookie生效时间30天 ,单位秒;-->
-        simpleCookie.setMaxAge(2592000);
+        simpleCookie.setMaxAge(redisProperties.getExpire());
         return simpleCookie;
     }
 

@@ -48,5 +48,9 @@ public class RedisProperties {
     private Integer port;
     private String password;
     private Integer timeout;
+    /**
+     * 默认30天 = 2592000s
+     */
+    private Integer expire = 2592000;
 
 }
