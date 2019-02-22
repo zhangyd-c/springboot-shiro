@@ -87,6 +87,10 @@ _注：以上图片是以`root`用户登录，`admin`用户的界面请参考`do
 #### 有任何问题可以
 - [给我留言](https://www.zhyd.me/guestbook)
 
+|  微信(备注:加群)  |  公众号  |
+| :------------: | :------------: |
+| <img src="https://gitee.com/yadong.zhang/static/raw/master/wx/wx.png" width="170"/> | <img src="https://gitee.com/yadong.zhang/static/raw/master/wx/wechat_account.jpg" width="200" /> |
+
 
 #### 开源协议
  [MIT](https://gitee.com/yadong.zhang/DBlog/blob/master/LICENSE)

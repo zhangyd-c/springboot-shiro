@@ -23,7 +23,7 @@
  */
 package com.zyd.shiro.framework.config;
 
-import org.mybatis.spring.annotation.MapperScan;
+import tk.mybatis.spring.annotation.MapperScan;
 import org.springframework.stereotype.Component;
 
 /**

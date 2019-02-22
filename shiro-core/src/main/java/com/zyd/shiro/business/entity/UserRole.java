@@ -19,7 +19,6 @@
  */
 package com.zyd.shiro.business.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zyd.shiro.persistence.beans.SysUserRole;
 
 import java.util.Date;
@@ -43,7 +42,6 @@ public class UserRole {
         this.sysUserRole = sysUserRole;
     }
 
-    @JsonIgnore
     public SysUserRole getSysUserRole() {
         return this.sysUserRole;
     }

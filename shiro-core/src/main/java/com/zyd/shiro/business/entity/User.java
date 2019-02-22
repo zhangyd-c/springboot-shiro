@@ -19,7 +19,6 @@
  */
 package com.zyd.shiro.business.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zyd.shiro.business.enums.*;
 import com.zyd.shiro.framework.object.AbstractBO;
 import com.zyd.shiro.persistence.beans.SysUser;
@@ -58,7 +57,6 @@ public class User extends AbstractBO {
         }
     }
 
-    @JsonIgnore
     public SysUser getSysUser() {
         return this.sysUser;
     }

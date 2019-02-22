@@ -26,6 +26,7 @@ import com.zyd.shiro.business.service.SysResourcesService;
 import com.zyd.shiro.business.service.SysUserService;
 import com.zyd.shiro.business.shiro.realm.ShiroRealm;
 import com.zyd.shiro.framework.holder.SpringContextHolder;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -34,8 +35,6 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.mgt.DefaultFilterChainManager;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -54,10 +53,10 @@ import java.util.Map;
  * @date 2018/4/25 14:37
  * @since 1.0
  */
+@Slf4j
 @Service
 public class ShiroServiceImpl implements ShiroService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShiroService.class);
     @Autowired
     private SysResourcesService resourcesService;
     @Autowired
@@ -143,7 +142,7 @@ public class ShiroServiceImpl implements ShiroService {
         shiroRealm.getAuthorizationCache().remove(subject.getPrincipals());
         subject.releaseRunAs();
 
-        LOG.info("用户[{}]的权限更新成功！！", user.getUsername());
+        log.info("用户[{}]的权限更新成功！！", user.getUsername());
 
     }
 

@@ -22,13 +22,12 @@ package com.zyd.shiro.business.shiro.credentials;
 import com.zyd.shiro.business.consts.SessionConst;
 import com.zyd.shiro.business.entity.User;
 import com.zyd.shiro.business.service.SysUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -44,9 +43,8 @@ import java.util.concurrent.TimeUnit;
  * @date 2018/4/24 14:37
  * @since 1.0
  */
+@Slf4j
 public class RetryLimitCredentialsMatcher extends CredentialsMatcher {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RetryLimitCredentialsMatcher.class);
 
     /**
      * 用户登录次数计数  redisKey 前缀
@@ -63,8 +61,7 @@ public class RetryLimitCredentialsMatcher extends CredentialsMatcher {
 
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
-        User shiroUser = (User) info.getPrincipals().getPrimaryPrincipal();
-        Long userId = shiroUser.getId();
+        Long userId = (Long) info.getPrincipals().getPrimaryPrincipal();
         User user = userService.getByPrimaryKey(userId);
         String username = user.getUsername();
         // 访问一次，计数一次

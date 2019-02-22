@@ -21,11 +21,10 @@ package com.zyd.shiro.controller;
 
 import com.zyd.shiro.framework.object.ResponseVO;
 import com.zyd.shiro.util.ResultUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,10 +43,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @date 2018/4/24 14:37
  * @since 1.0
  */
+@Slf4j
 @Controller
 @RequestMapping(value = "/passport")
 public class PassportController {
-    private static final Logger logger = LoggerFactory.getLogger(PassportController.class);
 
     @GetMapping("/login")
     public ModelAndView login(Model model) {
@@ -74,7 +73,7 @@ public class PassportController {
             currentUser.login(token);
             return ResultUtil.success("登录成功！");
         } catch (Exception e) {
-            logger.error("登录失败，用户名[{}]", username, e);
+            log.error("登录失败，用户名[{}]", username, e);
             token.clear();
             return ResultUtil.error(e.getMessage());
         }

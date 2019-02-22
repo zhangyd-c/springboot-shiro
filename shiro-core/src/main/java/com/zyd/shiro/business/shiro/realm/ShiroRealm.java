@@ -23,6 +23,7 @@ import com.zyd.shiro.business.entity.Resources;
 import com.zyd.shiro.business.entity.Role;
 import com.zyd.shiro.business.entity.User;
 import com.zyd.shiro.business.enums.UserStatusEnum;
+import com.zyd.shiro.business.enums.UserTypeEnum;
 import com.zyd.shiro.business.service.SysResourcesService;
 import com.zyd.shiro.business.service.SysRoleService;
 import com.zyd.shiro.business.service.SysUserService;
@@ -37,7 +38,10 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Shiro-密码输入错误的状态下重试次数的匹配管理
@@ -74,7 +78,7 @@ public class ShiroRealm extends AuthorizingRealm {
 
         // principal参数使用用户Id，方便动态刷新用户权限
         return new SimpleAuthenticationInfo(
-                user,
+                user.getId(),
                 user.getPassword(),
                 ByteSource.Util.bytes(username),
                 getName()
@@ -89,8 +93,7 @@ public class ShiroRealm extends AuthorizingRealm {
         // 权限信息对象info,用来存放查出的用户的所有的角色（role）及权限（permission）
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        Long userId = user.getId();
+        Long userId = (Long) SecurityUtils.getSubject().getPrincipal();
 
         // 赋予角色
         List<Role> roleList = roleService.listRolesByUserId(userId);
@@ -99,15 +102,27 @@ public class ShiroRealm extends AuthorizingRealm {
         }
 
         // 赋予权限
-        List<Resources> resourcesList = resourcesService.listByUserId(userId);
+        List<Resources> resourcesList = null;
+        User user = userService.getByPrimaryKey(userId);
+        if (null == user) {
+            return info;
+        }
+        // ROOT用户默认拥有所有权限
+        if (UserTypeEnum.ROOT.toString().equalsIgnoreCase(user.getUserType())) {
+            resourcesList = resourcesService.listAll();
+        } else {
+            resourcesList = resourcesService.listByUserId(userId);
+        }
+
         if (!CollectionUtils.isEmpty(resourcesList)) {
+            Set<String> permissionSet = new HashSet<>();
             for (Resources resources : resourcesList) {
-                String permission = resources.getPermission();
-                System.out.println(resources.getName() + "   " + permission);
-                if (!StringUtils.isEmpty(permission)) {
-                    info.addStringPermission(permission);
+                String permission = null;
+                if (!StringUtils.isEmpty(permission = resources.getPermission())) {
+                    permissionSet.addAll(Arrays.asList(permission.trim().split(",")));
                 }
             }
+            info.setStringPermissions(permissionSet);
         }
         return info;
     }

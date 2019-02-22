@@ -19,7 +19,6 @@
  */
 package com.zyd.shiro.business.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.zyd.shiro.business.enums.ResourceTypeEnum;
 import com.zyd.shiro.persistence.beans.SysResources;
 
@@ -44,7 +43,6 @@ public class Resources {
         this.sysResources = sysResources;
     }
 
-    @JsonIgnore
     public SysResources getSysResources() {
         return this.sysResources;
     }

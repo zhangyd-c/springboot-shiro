@@ -1,18 +1,18 @@
 /**
  * MIT License
- *
+ * <p>
  * Copyright (c) 2018 yadong.zhang
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,8 +23,7 @@
  */
 package com.zyd.shiro.framework.holder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -41,9 +40,8 @@ import javax.servlet.http.HttpSession;
  * @date 2018/4/16 16:26
  * @since 1.0
  */
+@Slf4j
 public class RequestHolder {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestHolder.class);
 
     /**
      * 获取request
@@ -51,8 +49,12 @@ public class RequestHolder {
      * @return HttpServletRequest
      */
     public static HttpServletRequest getRequest() {
-        LOGGER.debug("getRequest -- Thread id :{}, name : {}", Thread.currentThread().getId(), Thread.currentThread().getName());
-        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        log.debug("getRequest -- Thread id :{}, name : {}", Thread.currentThread().getId(), Thread.currentThread().getName());
+        ServletRequestAttributes servletRequestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
+        if (null == servletRequestAttributes) {
+            return null;
+        }
+        return servletRequestAttributes.getRequest();
     }
 
     /**
@@ -61,8 +63,12 @@ public class RequestHolder {
      * @return HttpServletRequest
      */
     public static HttpServletResponse getResponse() {
-        LOGGER.debug("getResponse -- Thread id :{}, name : {}", Thread.currentThread().getId(), Thread.currentThread().getName());
-        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        log.debug("getResponse -- Thread id :{}, name : {}", Thread.currentThread().getId(), Thread.currentThread().getName());
+        ServletRequestAttributes servletRequestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
+        if (null == servletRequestAttributes) {
+            return null;
+        }
+        return servletRequestAttributes.getResponse();
     }
 
     /**
@@ -71,20 +77,27 @@ public class RequestHolder {
      * @return HttpSession
      */
     public static HttpSession getSession() {
-        LOGGER.debug("getSession -- Thread id :{}, name : {}", Thread.currentThread().getId(), Thread.currentThread().getName());
-        return getRequest().getSession();
+        log.debug("getSession -- Thread id :{}, name : {}", Thread.currentThread().getId(), Thread.currentThread().getName());
+        HttpServletRequest request = null;
+        if (null == (request = getRequest())) {
+            return null;
+        }
+        return request.getSession();
     }
 
     /**
      * 获取session的Attribute
      *
-     * @param name
-     *         session的key
+     * @param name session的key
      * @return Object
      */
     public static Object getSession(String name) {
-        LOGGER.debug("getSession -- Thread id :{}, name : {}", Thread.currentThread().getId(), Thread.currentThread().getName());
-        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getAttribute(name, RequestAttributes.SCOPE_SESSION);
+        log.debug("getSession -- Thread id :{}, name : {}", Thread.currentThread().getId(), Thread.currentThread().getName());
+        ServletRequestAttributes servletRequestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
+        if (null == servletRequestAttributes) {
+            return null;
+        }
+        return servletRequestAttributes.getAttribute(name, RequestAttributes.SCOPE_SESSION);
     }
 
     /**
@@ -94,8 +107,12 @@ public class RequestHolder {
      * @param value
      */
     public static void setSession(String name, Object value) {
-        LOGGER.debug("setSession -- Thread id :{}, name : {}", Thread.currentThread().getId(), Thread.currentThread().getName());
-        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).setAttribute(name, value, RequestAttributes.SCOPE_SESSION);
+        log.debug("setSession -- Thread id :{}, name : {}", Thread.currentThread().getId(), Thread.currentThread().getName());
+        ServletRequestAttributes servletRequestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
+        if (null == servletRequestAttributes) {
+            return;
+        }
+        servletRequestAttributes.setAttribute(name, value, RequestAttributes.SCOPE_SESSION);
     }
 
     /**
@@ -105,8 +122,12 @@ public class RequestHolder {
      * @return void
      */
     public static void removeSession(String name) {
-        LOGGER.debug("removeSession -- Thread id :{}, name : {}", Thread.currentThread().getId(), Thread.currentThread().getName());
-        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).removeAttribute(name, RequestAttributes.SCOPE_SESSION);
+        log.debug("removeSession -- Thread id :{}, name : {}", Thread.currentThread().getId(), Thread.currentThread().getName());
+        ServletRequestAttributes servletRequestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
+        if (null == servletRequestAttributes) {
+            return;
+        }
+        servletRequestAttributes.removeAttribute(name, RequestAttributes.SCOPE_SESSION);
     }
 
     /**
@@ -115,7 +136,11 @@ public class RequestHolder {
      * @return String[]
      */
     public static String[] getSessionKeys() {
-        LOGGER.debug("getSessionKeys -- Thread id :{}, name : {}", Thread.currentThread().getId(), Thread.currentThread().getName());
-        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getAttributeNames(RequestAttributes.SCOPE_SESSION);
+        log.debug("getSessionKeys -- Thread id :{}, name : {}", Thread.currentThread().getId(), Thread.currentThread().getName());
+        ServletRequestAttributes servletRequestAttributes = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes());
+        if (null == servletRequestAttributes) {
+            return null;
+        }
+        return servletRequestAttributes.getAttributeNames(RequestAttributes.SCOPE_SESSION);
     }
 }
